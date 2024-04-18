@@ -38,12 +38,12 @@ export class ReviewRoutes {
                     if (err) {
                         return next(err); // Short-circuit if isAdmin check fails
                     }
-                    this.review_controller.get_review_by_id_even_deactivated(req, res);
+                    this.review_controller.get_review_by_id(req, res);
                 });
             });
         });
 
-        app.get('/review/byAuthor', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/review/byAuthor/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
@@ -52,7 +52,7 @@ export class ReviewRoutes {
             });
         });
 
-        app.get('/review/byPlace', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/review/byPlace/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
@@ -61,7 +61,7 @@ export class ReviewRoutes {
             });
         });
 
-        app.get('/review/byHousing', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/review/byHousing/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails

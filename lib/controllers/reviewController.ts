@@ -3,6 +3,7 @@ import { IReview } from '../modules/reviews/model';
 import ReviewService from '../modules/reviews/service';
 import UserService from '../modules/users/service';
 import * as mongoose from 'mongoose';
+import IJwtPayload from '../modules/JWTPayload';
 
 export class ReviewController {
 
@@ -12,20 +13,24 @@ export class ReviewController {
     public async create_review(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
-            if (req.body.title && req.body.content && req.body.stars && req.body.author  && req.body.place_id ){
+            if (req.body.title && req.body.content && req.body.stars    ){
+                //const _SECRET: string = 'api+jwt';
+                //onst token = req.header("x-access-token");
+                //const decoded = jwt.verify(token, _SECRET) as IJwtPayload;
+                console.log('dentro crear'+req.userId);
                 const review_params:IReview = {
                     title: req.body.title,
                     content: req.body.content,
                     stars: req.body.stars,
-                    author: req.body.author,
-                    place_id: req.body.place_id,
+                    author: req.userId,
+                    //place_id: req.body.place_id,
                     review_deactivated: false,
                     creation_date: new Date(),
                     modified_date: new Date(),
                 };
                 const review_data = await this.review_service.createReview(review_params);
                  //add to user
-                await this.user_service.addReviewToUser(req.body.author, review_data._id); //
+                await this.user_service.addReviewToUser(req.userId, review_data._id); //
                 return res.status(201).json(review_data);
             }else if (req.body.title && req.body.content && req.body.stars && req.body.author  && req.body.housing_id ){
                 const review_params:IReview = {
@@ -69,12 +74,10 @@ export class ReviewController {
     public async get_review_by_id(req: Request, res: Response) {
         try{
             if (req.params.id) {
-                const review_filter = { _id: req.params.id };
+                const review_filter = { author: req.params.id };
                 // Fetch user
-                const review_data = await this.review_service.filterReviewByID(review_filter);
-                if(review_data.review_deactivated===true){
-                    return res.status(400).json({ error: 'Review not found' });
-                }
+                const review_data = await this.review_service.filterReviews(review_filter);
+                console.log(review_data);
                 // Send success response
                 return res.status(200).json(review_data);
             } else {

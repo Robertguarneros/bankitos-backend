@@ -45,11 +45,10 @@ export default class ReviewService {
         }
     }
 
-    public async filterReviews(query: any, page: number, pageSize: number): Promise<IReview[] | null> {
+    public async filterReviews(query: any): Promise<IReview[] | null> {
         try {
-            const skipCount = (page - 1) * pageSize;
-            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
-            return await reviews.find(updatedQuery).skip(skipCount).limit(pageSize);
+            
+            return await reviews.find(query);
         } catch (error) {
             throw error;
         }
