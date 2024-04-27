@@ -16,7 +16,7 @@ class App {
    public app: express.Application;
    //if testing on local machine use the localhost link and comment the link below
    //public mongoUrl: string = 'mongodb://localhost/' + environment.getDBName();
-   public mongoUrl: string = 'mongodb://172.17.0.2:27017/' + environment.getDBName();
+   public mongoUrl: string = 'mongodb://172.17.0.4:27017/' + environment.getDBName();
 
    private test_routes: TestRoutes = new TestRoutes();
    private common_routes: CommonRoutes = new CommonRoutes();
