@@ -12,10 +12,12 @@ export class UserRoutes {
     public route(app: Application) {
         
         app.post('/users', (req: Request, res: Response) => {
+            console.log(1);
             this.user_controller.register_user(req, res);
         });
 
         app.post('/login', (req: Request, res: Response) => {
+            
             this.auth_controller.signin(req, res);
         });
 
@@ -46,12 +48,13 @@ export class UserRoutes {
         // e.g., /users?page=2&pageSize=10, to specify the page number and the number of users per page. 
         //If these parameters are not provided, default values will be used (page 1, pageSize 10).
         app.get('/users', (req: Request, res: Response, next: NextFunction) => {
-            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+            /* this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.user_controller.get_users(req, res);
-            });
+            }); */
+            this.user_controller.get_users(req, res);
         });
 
         app.get('/usersadmin', (req: Request, res: Response, next: NextFunction) => {

@@ -14,17 +14,16 @@ export class ReviewController {
         try{
             // this check whether all the filds were send through the request or not
             if (req.body.title && req.body.content && req.body.stars    ){
-                //const _SECRET: string = 'api+jwt';
-                //onst token = req.header("x-access-token");
-                //const decoded = jwt.verify(token, _SECRET) as IJwtPayload;
+               
                 console.log('dentro crear'+req.userId);
                 const review_params:IReview = {
                     title: req.body.title,
                     content: req.body.content,
                     stars: req.body.stars,
                     author: req.userId,
-                    //place_id: req.body.place_id,
-                    review_deactivated: false,
+                    place_id: req.body.place_id || null,
+                    housing_id: req.body.housing_id || null,
+                    review_deactivated: req.body.review_deactivated || false,
                     creation_date: new Date(),
                     modified_date: new Date(),
                 };
@@ -32,22 +31,8 @@ export class ReviewController {
                  //add to user
                 await this.user_service.addReviewToUser(req.userId, review_data._id); //
                 return res.status(201).json(review_data);
-            }else if (req.body.title && req.body.content && req.body.stars && req.body.author  && req.body.housing_id ){
-                const review_params:IReview = {
-                    title: req.body.title,
-                    content: req.body.content,
-                    stars: req.body.stars,
-                    author: req.body.author,
-                    housing_id: req.body.housing_id,
-                    review_deactivated: false,
-                    creation_date: new Date(),
-                    modified_date: new Date(),
-                };
-                const review_data = await this.review_service.createReview(review_params);
-                 //add to user
-                await this.user_service.addReviewToUser(req.body.author, review_data._id); //
-                return res.status(201).json(review_data);
-            }else{            
+            }
+            else{            
                 return res.status(400).json({ error: 'Missing fields' });
             }
         }catch(error){

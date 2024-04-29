@@ -9,6 +9,7 @@ export class UserController {
 
     public async register_user(req: Request, res: Response) {
         try{
+            console.log(2);
             // this check whether all the filds were send through the request or not
             if (req.body.first_name 
                 && req.body.last_name 
@@ -31,7 +32,9 @@ export class UserController {
                     creation_date: new Date(),
                     modified_date: new Date(),
                 };
+                console.log(3);
                 const user_data = await this.user_service.register(user_params);
+                console.log(user_data);
                 return res.status(201).json(user_data );
             }else{            
                 return res.status(400).json({ error: 'Missing fields' });
