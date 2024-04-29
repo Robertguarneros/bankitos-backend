@@ -12,14 +12,30 @@ public async signin(req: Request, res: Response): Promise<Response> {
     const _SECRET: string = 'api+jwt';
     const userFound = await this.user_service.filterOneUser({email:req.body.email});
     
-
-    if (!userFound) return res.status(400).json({ message: "User Not Found" });
-
-    if (userFound.password != req.body.password) return res.status(401).json({
+    const user_params = new User({
+        first_name: userFound.first_name,
+        last_name: userFound.last_name,
+        email: userFound.email,
+        phone_number: userFound.phone_number,
+        gender: userFound.gender,
+        password: userFound.password,
+        birth_date: userFound.birth_date,
+        role: userFound.role,
+        user_deactivated: userFound.user_deactivated,
+        creation_date: userFound.creation_date,
+        modified_date: userFound.modified_date,
+        
+    });
+    console.log(req.body.password);
+    console.log(user_params.password);
+    
+    const validPassword = await user_params.validatePassword(req.body.password);
+    console.log(validPassword);
+    if (!validPassword ||!userFound) return res.status(401).json({
             token: null,
-            message: "Invalid Password",
-        });
-
+            message: "El usuario o la contraseña son incorrectos.",
+    });
+    else{
     const session = { 'id': userFound._id } as IJwtPayload;
 
     const token = jwt.sign(session, _SECRET, {
@@ -28,6 +44,8 @@ public async signin(req: Request, res: Response): Promise<Response> {
     
     console.log (token);
     return res.json({token: token, _id: userFound._id, first_name: userFound.first_name});
+    }   
+    
 };
 
 }

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { IUser } from '../modules/users/model';
 import UserService from '../modules/users/service';
 import * as mongoose from 'mongoose';
+import User from '../modules/users/schema';
+
 
 export class UserController {
 
@@ -19,7 +21,7 @@ export class UserController {
                 && req.body.password
                 && req.body.birth_date
                 ) {
-                const user_params: IUser = {
+                const user_params = new User({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
                     email: req.body.email,
@@ -31,8 +33,10 @@ export class UserController {
                     user_deactivated: false,
                     creation_date: new Date(),
                     modified_date: new Date(),
-                };
+                    
+                });
                 console.log(3);
+                user_params.password = await user_params.encryptPassword(req.body.password);
                 const user_data = await this.user_service.register(user_params);
                 console.log(user_data);
                 return res.status(201).json(user_data );
@@ -125,7 +129,7 @@ export class UserController {
                 // Check if emergency_contact exists in req.body and handle accordingly
                 const emergency_contact = req.body.emergency_contact || {};
                 
-                const user_params: IUser = {
+                const user_params = new User({
                     _id: objectid, 
                     first_name: req.body.first_name || user_data.first_name,
                     middle_name: req.body.middle_name || user_data.middle_name,
@@ -152,7 +156,8 @@ export class UserController {
                     user_deactivated: user_data.user_deactivated,
                     creation_date: user_data.creation_date,
                     modified_date: new Date(),
-                };
+                });
+                user_params.password = await user_params.encryptPassword(req.body.password);
                 // Update user
                 await this.user_service.updateUser(user_params);
                 //get new user data

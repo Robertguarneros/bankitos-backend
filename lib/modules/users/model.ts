@@ -28,4 +28,7 @@ export interface IUser {
     user_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;
+    encryptPassword(password: string): Promise<string>;
+    validatePassword(password: string): Promise<boolean>;
 }
+export interface IUserModel extends IUser, Document {}

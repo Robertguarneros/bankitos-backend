@@ -5,6 +5,7 @@ import { Types, FilterQuery } from 'mongoose';
 export default class UserService {
     public async register(user_params:IUser): Promise<IUser> {
         try {
+            
             const session = new users(user_params);
             return await session.save();
         }catch(error) {

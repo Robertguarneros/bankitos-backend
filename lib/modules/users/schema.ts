@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
+import { IUserModel } from './model';
 
+const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
@@ -34,5 +36,14 @@ const schema = new Schema({
     
     }
 );
+schema.methods.encryptPassword = async (password:string) => {
+  const salt = await bcrypt.genSalt(10);
+  
+  return bcrypt.hash(password, salt);
+};
 
-export default mongoose.model('users', schema);
+schema.methods.validatePassword = async function (password:string) {
+  
+  return bcrypt.compare(password, this.password);
+};
+export default mongoose.model<IUserModel>('users', schema);
