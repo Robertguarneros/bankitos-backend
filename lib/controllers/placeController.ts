@@ -11,7 +11,6 @@ export class PlaceController {
 
   public async create_place(req: Request, res: Response) {
       try {
-        console.log("create place")
         console.log(req.body.title, req.body.content,req.body.author,req.body.rating,
             req.body.coords,
             req.body.photo,
@@ -34,7 +33,6 @@ export class PlaceController {
           req.body.creation_date &&
           req.body.modified_date
         ) {
-        console.log("IPlace")
           const place_params: IPlace = {
             title: req.body.title,
             content: req.body.content,
