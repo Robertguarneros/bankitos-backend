@@ -9,6 +9,7 @@ import { CommonRoutes } from "../routes/common_routes";
 import { PlaceRoutes } from "../routes/place_routes";
 import { ReviewRoutes } from "../routes/review_routes";
 import { ConversationRoutes } from "../routes/conversation_routes";
+import { HousingRoutes } from "../routes/housing_routes";
 
 
 class App {
@@ -24,6 +25,7 @@ class App {
    private place_routes: PlaceRoutes = new PlaceRoutes();
    private review_routes: ReviewRoutes = new ReviewRoutes();
    private conversation_routes: ConversationRoutes = new ConversationRoutes();
+   private housing_routes: HousingRoutes = new HousingRoutes();
 
    constructor() {
       this.app = express();
@@ -34,6 +36,7 @@ class App {
       this.place_routes.route(this.app);
       this.review_routes.route(this.app);
       this.conversation_routes.route(this.app);
+      this.housing_routes.route(this.app);
       //Siempre dejarlo abajo del todo si no da error!!!
       this.common_routes.route(this.app);
    

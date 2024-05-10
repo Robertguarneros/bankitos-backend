@@ -107,6 +107,7 @@ export default class UserService {
             // Save the updated user document
             await user.save();
         } catch (error) {
+            
             throw error;
         }
     }
@@ -121,10 +122,12 @@ export default class UserService {
 
             // Add the post ID to the user's array of posts
             user.housing_offered.push(housingId);
+            console.log(user);
 
             // Save the updated user document
             await user.save();
         } catch (error) {
+            console.log("****************ERROR",error);
             throw error;
         }
     }

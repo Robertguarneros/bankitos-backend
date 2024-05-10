@@ -23,7 +23,7 @@ const schema = new Schema({
     birth_date: {type:Date,required:true},
     role: {type:String,required:true,default:'user'},
     address: {type:String,required:false},
-    housing_offered: [{ type: Schema.Types.ObjectId, ref: 'housing' }], // Array of ObjectIds referencing the housing model
+    housing_offered: [{ type: Schema.Types.ObjectId, ref: 'housings' }], // Array of ObjectIds referencing the housing model
     emergency_contact: {
         type:{
         full_name: { type: String, required: true },

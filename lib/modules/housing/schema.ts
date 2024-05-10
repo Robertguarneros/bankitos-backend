@@ -36,4 +36,4 @@ const schema = new Schema({
 
 });
 
-export default mongoose.model("housing", schema);
+export default mongoose.model("housings", schema);

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { IHousing } from '../modules/housing/model';
 import UserService from '../modules/users/service';
-import HousingService from 'modules/housing/service';
+import HousingService from '../modules/housing/service';
 import * as mongoose from 'mongoose';
 
 export class HousingController {
@@ -21,24 +21,21 @@ export class HousingController {
         req.body.photo &&
         req.body.address &&
         req.body.availability &&
-        req.body.coffe &&
+        req.body.coffee &&
         req.body.schedule &&
-        req.body.verified &&
-        req.body.date &&
-        req.body.deactivated
+        req.body.verified
       ) {
         const house_params: IHousing = {
           title: req.body.title,
           description: req.body.description,
           owner: req.body.owner,
           rating: req.body.rating,
-          reviews: req.body.reviews,
           coords:{
             latitude: req.body.coords.latitude,
             longitude: req.body.coords.longitude,
           },
           photo: req.body.photo,
-          address: req.body.location,
+          address: req.body.address,
           availability: req.body.availability,
           coffee: req.body.coffee,
           schedule: {
@@ -51,13 +48,15 @@ export class HousingController {
             sunday: req.body.schedule.sunday,
           },
           verified: req.body.verified,
-          house_deactivated: req.body.deactivated,
-          creation_date: req.body.date,
-          modified_date: req.body.date,
+          house_deactivated: false,
+          creation_date: new Date(),
+          modified_date: new Date(),
         };
+
         const house_data = await this.housing_service.createHouse(house_params);
+        console.log(house_data);
         // Now, you may want to add the created post's ID to the user's array of posts
-        await this.user_service.addHousingOfferedToUser(req.body.author, house_data._id);
+        await this.user_service.addHousingOfferedToUser(req.body.owner, house_data._id);
         return res.status(201).json(house_data);
       } else {
         return res.status(400).json({ error: 'Missing fields' });
