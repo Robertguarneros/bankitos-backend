@@ -43,7 +43,7 @@ public async signin(req: Request, res: Response): Promise<Response> {
         });
     
     console.log (token);
-    return res.json({token: token, _id: userFound._id, first_name: userFound.first_name});
+    return res.json({token: token, user: userFound});
     }   
     
 };
