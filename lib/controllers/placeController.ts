@@ -11,14 +11,6 @@ export class PlaceController {
 
   public async create_place(req: Request, res: Response) {
       try {
-        console.log(req.body.title, req.body.content,req.body.author,req.body.rating,
-            req.body.coords,
-            req.body.photo,
-            req.body.typeOfPlace,
-            req.body.schedule,
-            req.body.address,
-            req.body.creation_date,
-            req.body.modified_date)
         // this check whether all the fields were sent through the request or not
         if (
           req.body.title &&
@@ -29,9 +21,7 @@ export class PlaceController {
           req.body.photo &&
           req.body.typeOfPlace &&
           req.body.schedule &&
-          req.body.address &&
-          req.body.creation_date &&
-          req.body.modified_date
+          req.body.address
         ) {
           const place_params: IPlace = {
             title: req.body.title,
@@ -59,8 +49,8 @@ export class PlaceController {
             },
             address: req.body.address,
             place_deactivated: false,
-            creation_date: req.body.creation_date,
-            modified_date: req.body.modified_date
+            creation_date: new Date(),
+            modified_date: new Date(),
           };
           console.log("Place data")
           const place_data = await this.place_service.createPlace(place_params);
