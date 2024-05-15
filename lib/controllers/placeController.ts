@@ -100,6 +100,22 @@ export class PlaceController {
         return res.status(500).json({ error: 'Internal server error' });
     }
   }
+  public async get_places_by_user(req: Request, res: Response) {
+    try {
+        // Extract pagination parameters from query string or use default values
+        const page = req.query.page ? parseInt(req.query.page as string) : 1;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+        const place_filter = { author: req.params.id };
+
+        // Fetch users based on pagination parameters
+        const place_data = await this.place_service.filterPlaces(place_filter, page, pageSize);
+
+        // Send success response
+        return res.status(200).json(place_data);
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
 
   public async get_places_even_deactivated(req: Request, res: Response) {
       try {

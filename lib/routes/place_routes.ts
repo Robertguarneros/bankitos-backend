@@ -30,6 +30,14 @@ export class PlaceRoutes {
                 this.place_controller.get_place(req, res);
             });
         });
+        app.get('/placebyuser/:id', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.place_controller.get_places_by_user(req, res);
+            });
+        });
 
         app.get('/place', (req: Request, res: Response, next: NextFunction) => {
             /* this.AuthJWT.verifyToken(req, res, (err?: any) => {
