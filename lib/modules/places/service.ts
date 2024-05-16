@@ -1,6 +1,6 @@
 import { IPlace } from './model';
 import places from './schema';
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 
 export default class PostService {
     
@@ -58,4 +58,21 @@ export default class PostService {
         }
     }
 
+    public async addReviewToPlace(placeId: Types.ObjectId, reviewId: Types.ObjectId): Promise<void> {
+        try {
+            // Retrieve the user document by ID
+            const place = await places.findById(placeId);
+            if (!place) {
+                throw new Error('User not found');
+            }
+
+            // Add the post ID to the user's array of posts
+            place.reviews.push(reviewId);
+
+            // Save the updated user document
+            await place.save();
+        } catch (error) {
+            throw error;
+        }
+    }
 }

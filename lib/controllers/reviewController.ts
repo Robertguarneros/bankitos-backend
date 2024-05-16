@@ -4,11 +4,13 @@ import ReviewService from '../modules/reviews/service';
 import UserService from '../modules/users/service';
 import * as mongoose from 'mongoose';
 import IJwtPayload from '../modules/JWTPayload';
+import PostService from '../modules/places/service';
 
 export class ReviewController {
 
     private review_service: ReviewService = new ReviewService();
     private user_service: UserService = new UserService();
+    private place_service: PostService = new PostService();
 
     public async create_review(req: Request, res: Response) {
         try{
@@ -30,6 +32,10 @@ export class ReviewController {
                 const review_data = await this.review_service.createReview(review_params);
                  //add to user
                 await this.user_service.addReviewToUser(req.userId, review_data._id); //
+                // add to place
+                if(review_data.place_id){
+                    await this.place_service.addReviewToPlace(review_data.place_id, review_data._id);
+                }
                 return res.status(201).json(review_data);
             }
             else{            
