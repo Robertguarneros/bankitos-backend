@@ -23,7 +23,8 @@ export default class ReviewService {
 
     public async filterReviewsByPlace(query: any): Promise<IReview[]> {
         try {
-            return await reviews.find(query);
+            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
+            return await reviews.find(updatedQuery);
         } catch (error) {
             throw error;
         }

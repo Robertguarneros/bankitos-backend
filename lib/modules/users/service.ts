@@ -25,7 +25,7 @@ export default class UserService {
         try {
             const skipCount = (page - 1) * pageSize;
             const updatedQuery = { ...query, user_deactivated: { $ne: true } };
-            return await users.find().skip(skipCount).limit(pageSize);
+            return await users.find(updatedQuery).skip(skipCount).limit(pageSize);
         } catch (error) {
             throw error;
         }
