@@ -15,7 +15,8 @@ export default class ReviewService {
 
     public async filterReviewsByAuthor(query: any): Promise<IReview[]> {
         try {
-            return await reviews.find(query);
+            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
+            return await reviews.find(updatedQuery);
         } catch (error) {
             throw error;
         }
@@ -32,7 +33,8 @@ export default class ReviewService {
 
     public async filterReviewsByHousing(query: any): Promise<IReview[]> {
         try {
-            return await reviews.find(query);
+            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
+            return await reviews.find(updatedQuery);
         } catch (error) {
             throw error;
         }
@@ -40,7 +42,8 @@ export default class ReviewService {
 
     public async filterReviewByID(query: any): Promise<IReview | null> {
         try {
-            return await reviews.findOne(query);
+            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
+            return await reviews.findOne(updatedQuery);
         } catch (error) {
             throw error;
         }
@@ -48,8 +51,8 @@ export default class ReviewService {
 
     public async filterReviews(query: any): Promise<IReview[] | null> {
         try {
-            
-            return await reviews.find(query);
+            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
+            return await reviews.find(updatedQuery);
         } catch (error) {
             throw error;
         }

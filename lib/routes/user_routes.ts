@@ -48,13 +48,12 @@ export class UserRoutes {
         // e.g., /users?page=2&pageSize=10, to specify the page number and the number of users per page. 
         //If these parameters are not provided, default values will be used (page 1, pageSize 10).
         app.get('/users', (req: Request, res: Response, next: NextFunction) => {
-            /* this.AuthJWT.verifyToken(req, res, (err?: any) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.user_controller.get_users(req, res);
-            }); */
-            this.user_controller.get_users(req, res);
+            }); 
         });
 
         app.get('/usersadmin', (req: Request, res: Response, next: NextFunction) => {
