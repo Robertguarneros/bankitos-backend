@@ -65,9 +65,9 @@ export class ReviewController {
     public async get_review_by_id(req: Request, res: Response) {
         try{
             if (req.params.id) {
-                const review_filter = { author: req.params.id };
+                const review_filter = { _id: req.params.id };
                 // Fetch user
-                const review_data = await this.review_service.filterReviews(review_filter);
+                const review_data = await this.review_service.filterReviewByID(review_filter);
                 console.log(review_data);
                 // Send success response
                 return res.status(200).json(review_data);

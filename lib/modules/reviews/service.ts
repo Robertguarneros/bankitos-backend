@@ -42,8 +42,7 @@ export default class ReviewService {
 
     public async filterReviewByID(query: any): Promise<IReview | null> {
         try {
-            const updatedQuery = { ...query, review_deactivated: { $ne: true } };
-            return await reviews.findOne(updatedQuery);
+            return await reviews.findOne(query);
         } catch (error) {
             throw error;
         }
