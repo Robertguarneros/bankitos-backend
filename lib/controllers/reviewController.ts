@@ -27,7 +27,7 @@ export class ReviewController {
                     housing_id: req.body.housing_id || null,
                     review_deactivated: req.body.review_deactivated || false,
                     creation_date: new Date(),
-                    modified_date: new Date(),
+                    modified_date: new Date()
                 };
                 const review_data = await this.review_service.createReview(review_params);
                  //add to user
