@@ -17,7 +17,10 @@ export class PlaceController {
           req.body.content &&
           req.body.author &&
           req.body.rating &&
-          req.body.coords &&
+          req.body.coords.coordinates &&
+          req.body.coords.coordinates.length === 2 &&
+            req.body.coords.coordinates[0] !== null &&
+            req.body.coords.coordinates[1] !== null &&
           req.body.photo &&
           req.body.typeOfPlace &&
           req.body.schedule &&
@@ -30,7 +33,7 @@ export class PlaceController {
             rating: req.body.rating,
             coords: {
                 type: 'Point',
-                coordinates: [req.body.coords.longitude, req.body.coords.latitude],
+                coordinates: [req.body.coords.coordinates[0], req.body.coords.coordinates[1]],
             },
             photo: req.body.photo,
             typeOfPlace: {
@@ -52,7 +55,7 @@ export class PlaceController {
             creation_date: new Date(),
             modified_date: new Date(),
           };
-          console.log("Place data")
+          console.log(place_params)
           const place_data = await this.place_service.createPlace(place_params);
           // Now, you may want to add the created post's ID to the user's array of posts
           console.log("place data realizado")
@@ -64,7 +67,7 @@ export class PlaceController {
           return res.status(400).json({ error: 'Missing fields' });
         }
       } catch (error) {
-        console.log("Error: "+error)
+        console.log("Error rtr: "+error)
         return res.status(500).json({ error: 'Internal server error' });
       }
   }
