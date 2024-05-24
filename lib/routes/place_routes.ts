@@ -30,6 +30,7 @@ export class PlaceRoutes {
                 this.place_controller.get_place(req, res);
             });
         });
+
         app.get('/placebyuser/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
@@ -90,6 +91,17 @@ export class PlaceRoutes {
                     this.place_controller.deactivate_place(req, res);
                 }, 'Place');
             });
+        });
+
+        // Get nearly bankitos 
+        app.get('/place/:longitude/:latitude/:maxDistanceKm', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.place_controller.find_nearby_bankitos(req, res);
+            }); 
+            
         });
 
     }

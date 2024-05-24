@@ -28,9 +28,9 @@ export class PlaceController {
             content: req.body.content,
             author: req.body.author,
             rating: req.body.rating,
-            coords:{
-              latitude: req.body.coords.latitude,
-              longitude: req.body.coords.longitude,
+            coords: {
+                type: 'Point',
+                coordinates: [req.body.coords.longitude, req.body.coords.latitude],
             },
             photo: req.body.photo,
             typeOfPlace: {
@@ -156,8 +156,11 @@ export class PlaceController {
                   author: req.body.author || place_data.author,
                   rating: req.body.rating || place_data.rating,
                   coords: {
-                      latitude: req.body.coords.latitude || place_data.coords.latitude,
-                      longitude: req.body.coords.longitude || place_data.coords.longitude,
+                    type: 'Point',
+                    coordinates: [
+                      req.body.coords?.longitude || place_data.coords.coordinates[0],
+                      req.body.coords?.latitude || place_data.coords.coordinates[1],
+                    ],
                   },
                   photo: req.body.photo || place_data.photo,
                   typeOfPlace: {
@@ -235,5 +238,22 @@ export class PlaceController {
       return res.status(500).json({ error: 'Internal server error' });
   }
 }
-     
+
+public async find_nearby_bankitos(req: Request, res: Response) {
+    try {
+        const { longitude, latitude, maxDistanceKm } = req.query;
+        // Aquí puedes acceder a los parámetros de consulta, como se mencionó anteriormente
+        console.log("Longitude:", parseFloat(longitude as string));
+        console.log("Latitude:", parseFloat(latitude as string));
+        console.log("Max Distance Km:", parseFloat(maxDistanceKm as string));
+
+        //const place_data = await this.place_service.findNearbyBankito(parseFloat(longitude as string), parseFloat(latitude as string), parseFloat(maxDistanceKm as string));
+
+        // Llama a tu lógica de negocio para procesar los parámetros y devolver la respuesta adecuada
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 }

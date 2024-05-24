@@ -7,10 +7,7 @@ export interface IPlace {
     author: mongoose.Types.ObjectId; // Reference to the User collection
     reviews?: mongoose.Types.ObjectId[];
     rating: number;
-    coords: {
-        latitude: number;
-        longitude: number;
-    };
+    coords: ICoords;
     photo: string;
     typeOfPlace: {
         bankito: boolean;
@@ -30,4 +27,9 @@ export interface IPlace {
     place_deactivated:boolean;
     creation_date: Date;
     modified_date: Date;
+}
+
+interface ICoords {
+    type: 'Point';
+    coordinates: [number,number]
 }

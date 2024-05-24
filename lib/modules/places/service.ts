@@ -75,4 +75,53 @@ export default class PostService {
             throw error;
         }
     }
+
+    public async findNearbyBankito (longitude: number, latitude: number, maxDistanceKm:number): Promise<(IPlace & { distance: number })[]>{
+        
+        const maxDistanceMeters = maxDistanceKm * 1000;
+
+        try {
+            const bankito: (IPlace & { distance?: number })[] = await places.find({
+                'typeOfPlace.bankito': true, // Filtro para "bankitos"
+                coords: {
+                    $near: {
+                        $geometry: {
+                            type: 'Point',
+                            coordinates: [longitude, latitude]
+                        },
+                        $maxDistance: maxDistanceMeters
+                    }
+                }
+            }).lean().exec();
+
+            return bankito.map(places => {
+                const distance = this.calculateDistance([longitude, latitude], places.coords.coordinates);
+                return { ...places, distance };
+            });
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    }
+
+    private calculateDistance (coords1: [number, number], coords2: [number, number]): number {
+        const [lon1, lat1] = coords1;
+        const [lon2, lat2] = coords2;
+
+        const R = 6371; // Radio de la Tierra en km
+        const dLat = this.degreesToRadians(lat2 - lat1);
+        const dLon = this.degreesToRadians(lon2 - lon1);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.degreesToRadians(lat1)) * Math.cos(this.degreesToRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // Distancia en km
+
+        return distance;
+    }
+
+    private degreesToRadians(degrees: number): number {
+        return degrees * (Math.PI / 180);
+    }
 }
