@@ -94,15 +94,15 @@ export class PlaceRoutes {
         });
 
         // Get nearly bankitos 
-        app.get('/place/:longitude/:latitude/:maxDistanceKm', (req: Request, res: Response, next: NextFunction) => {
+        app.get('/bankitos/:longitude/:latitude/:maxDistanceKm', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.place_controller.find_nearby_bankitos(req, res);
-            }); 
-            
+            });
         });
+
 
     }
 }

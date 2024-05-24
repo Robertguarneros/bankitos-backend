@@ -241,17 +241,21 @@ export class PlaceController {
 
 public async find_nearby_bankitos(req: Request, res: Response) {
     try {
-        const { longitude, latitude, maxDistanceKm } = req.query;
-        // Aquí puedes acceder a los parámetros de consulta, como se mencionó anteriormente
-        console.log("Longitude:", parseFloat(longitude as string));
-        console.log("Latitude:", parseFloat(latitude as string));
-        console.log("Max Distance Km:", parseFloat(maxDistanceKm as string));
+        const { longitude, latitude, maxDistanceKm } = req.params;
+        console.log(`Received params - longitude: ${longitude}, latitude: ${latitude}, maxDistanceKm: ${maxDistanceKm}`);
 
-        //const place_data = await this.place_service.findNearbyBankito(parseFloat(longitude as string), parseFloat(latitude as string), parseFloat(maxDistanceKm as string));
+        if (!longitude || !latitude || !maxDistanceKm) {
+            return res.status(400).json({ error: 'Missing longitude, latitude, or maxDistanceKm' });
+        }
 
-        // Llama a tu lógica de negocio para procesar los parámetros y devolver la respuesta adecuada
+        const places = await this.place_service.findNearbyBankito(
+            parseFloat(longitude),
+            parseFloat(latitude),
+            parseFloat(maxDistanceKm)
+        );
+
+        return res.status(200).json(places);
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 }

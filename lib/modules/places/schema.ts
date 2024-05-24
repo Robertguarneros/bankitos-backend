@@ -41,4 +41,4 @@ const schema = new Schema({
 
 schema.index({ coords: '2dsphere' });
 
-export default mongoose.model<IPlace>('place', schema);
+export default mongoose.model<IPlace & mongoose.Document>('places', schema);

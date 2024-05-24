@@ -76,12 +76,12 @@ export default class PostService {
         }
     }
 
-    public async findNearbyBankito (longitude: number, latitude: number, maxDistanceKm:number): Promise<(IPlace & { distance: number })[]>{
-        
-        const maxDistanceMeters = maxDistanceKm * 1000;
+    public async findNearbyBankito(longitude: number, latitude: number, maxDistanceKm: number): Promise<(IPlace & { distance: number })[]> {
+        const maxDistanceMeters = maxDistanceKm * 1000; // Convertir kilómetros a metros
 
         try {
-            const bankito: (IPlace & { distance?: number })[] = await places.find({
+            // Realizar la consulta y devolver los documentos como un array
+            const foundPlaces: (IPlace & { distance?: number })[] = await places.find({
                 'typeOfPlace.bankito': true, // Filtro para "bankitos"
                 coords: {
                     $near: {
@@ -94,9 +94,14 @@ export default class PostService {
                 }
             }).lean().exec();
 
-            return bankito.map(places => {
-                const distance = this.calculateDistance([longitude, latitude], places.coords.coordinates);
-                return { ...places, distance };
+            
+            if (!Array.isArray(foundPlaces)) {
+                throw new Error('Expected foundPlaces to be an array');
+            }
+
+            return foundPlaces.map(place => {
+                const distance = this.calculateDistance([longitude, latitude], place.coords.coordinates);
+                return { ...place, distance };
             });
         } catch (error) {
             console.error(error);
@@ -104,7 +109,7 @@ export default class PostService {
         }
     }
 
-    private calculateDistance (coords1: [number, number], coords2: [number, number]): number {
+    private calculateDistance(coords1: [number, number], coords2: [number, number]): number {
         const [lon1, lat1] = coords1;
         const [lon2, lat2] = coords2;
 
