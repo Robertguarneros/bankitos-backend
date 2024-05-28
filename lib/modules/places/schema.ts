@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { IPlace } from "./model";
 
 const Schema = mongoose.Schema;
 
@@ -9,10 +10,8 @@ const schema = new Schema({
   reviews: [{ type: Schema.Types.ObjectId, ref: "reviews", required:false }],
   rating: { type: Number, required: true },
   coords: {
-    type:{
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true }},
-    required: true,
+    type: { type: String, enum: ['Point'], required: true },
+    coordinates: { type: [Number], required: true }
   },
   photo: { type: String, required: true },
   typeOfPlace: {
@@ -40,4 +39,6 @@ const schema = new Schema({
 
 });
 
-export default mongoose.model("places", schema);
+schema.index({ coords: '2dsphere' });
+
+export default mongoose.model<IPlace & mongoose.Document>('places', schema);

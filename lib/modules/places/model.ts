@@ -8,8 +8,8 @@ export interface IPlace {
     reviews?: mongoose.Types.ObjectId[];
     rating: number;
     coords: {
-        latitude: number;
-        longitude: number;
+        type: 'Point',
+        coordinates: [number, number]
     };
     photo: string;
     typeOfPlace: {

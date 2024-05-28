@@ -14,7 +14,7 @@ export class PlaceRoutes {
         app.post('/place', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
-                    console.log("Error: " + err)
+                    console.log("Error cc: " + err)
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.place_controller.create_place(req, res);
@@ -30,6 +30,7 @@ export class PlaceRoutes {
                 this.place_controller.get_place(req, res);
             });
         });
+
         app.get('/placebyuser/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {
                 if (err) {
@@ -91,6 +92,19 @@ export class PlaceRoutes {
                 }, 'Place');
             });
         });
+
+        // Get nearly bankitos 
+        app.get('/bankitos/:longitude/:latitude/:maxDistanceKm', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                
+
+                this.place_controller.find_nearby_bankitos(req, res);
+            });
+        });
+
 
     }
 }

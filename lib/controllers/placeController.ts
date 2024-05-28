@@ -17,7 +17,10 @@ export class PlaceController {
           req.body.content &&
           req.body.author &&
           req.body.rating &&
-          req.body.coords &&
+          req.body.coords.coordinates &&
+          req.body.coords.coordinates.length === 2 &&
+            req.body.coords.coordinates[0] !== null &&
+            req.body.coords.coordinates[1] !== null &&
           req.body.photo &&
           req.body.typeOfPlace &&
           req.body.schedule &&
@@ -28,9 +31,9 @@ export class PlaceController {
             content: req.body.content,
             author: req.body.author,
             rating: req.body.rating,
-            coords:{
-              latitude: req.body.coords.latitude,
-              longitude: req.body.coords.longitude,
+            coords: {
+                type: 'Point',
+                coordinates: [req.body.coords.coordinates[0], req.body.coords.coordinates[1]],
             },
             photo: req.body.photo,
             typeOfPlace: {
@@ -52,7 +55,7 @@ export class PlaceController {
             creation_date: new Date(),
             modified_date: new Date(),
           };
-          console.log("Place data")
+          console.log(place_params)
           const place_data = await this.place_service.createPlace(place_params);
           // Now, you may want to add the created post's ID to the user's array of posts
           console.log("place data realizado")
@@ -64,7 +67,7 @@ export class PlaceController {
           return res.status(400).json({ error: 'Missing fields' });
         }
       } catch (error) {
-        console.log("Error: "+error)
+        console.log("Error rtr: "+error)
         return res.status(500).json({ error: 'Internal server error' });
       }
   }
@@ -156,8 +159,11 @@ export class PlaceController {
                   author: req.body.author || place_data.author,
                   rating: req.body.rating || place_data.rating,
                   coords: {
-                      latitude: req.body.coords.latitude || place_data.coords.latitude,
-                      longitude: req.body.coords.longitude || place_data.coords.longitude,
+                    type: 'Point',
+                    coordinates: [
+                      req.body.coords?.longitude || place_data.coords.coordinates[0],
+                      req.body.coords?.latitude || place_data.coords.coordinates[1],
+                    ],
                   },
                   photo: req.body.photo || place_data.photo,
                   typeOfPlace: {
@@ -235,5 +241,26 @@ export class PlaceController {
       return res.status(500).json({ error: 'Internal server error' });
   }
 }
-     
+
+public async find_nearby_bankitos(req: Request, res: Response) {
+    try {
+        const { longitude, latitude, maxDistanceKm } = req.params;
+        console.log(`Received params - longitude: ${longitude}, latitude: ${latitude}, maxDistanceKm: ${maxDistanceKm}`);
+
+        if (!longitude || !latitude || !maxDistanceKm) {
+            return res.status(400).json({ error: 'Missing longitude, latitude, or maxDistanceKm' });
+        }
+
+        const places = await this.place_service.findNearbyBankito(
+            parseFloat(longitude),
+            parseFloat(latitude),
+            parseFloat(maxDistanceKm)
+        );
+
+        return res.status(200).json(places);
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 }
