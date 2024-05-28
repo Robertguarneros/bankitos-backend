@@ -72,4 +72,64 @@ export class AuthController {
       });
     }
   }
+
+  public async signinWithGoogle(req: Request, res: Response): Promise<Response> {
+    console.log('Log in With Google');
+    const _SECRET: string = 'api+jwt';
+    if(req.body.token && req.body.email){
+    try {
+      // Verificar el token recibido de Google
+      const googleToken = req.body.token;
+      console.log(req.body.token);
+      
+      //Validar token de google con librería
+      /*
+      const googleTokenVerified = true; 
+
+      if (!googleTokenVerified) {
+        return res.status(401).json({
+          token: null,
+          message: "Token de Google inválido.",
+        });
+      }
+      */
+
+      // Obtenemos el correo electrónico del usuario desde el token de Google
+      const userEmail = req.body.email;
+      console.log("mail: "+req.body.email);
+      // Verificar si el usuario existe en la base de datos
+      const userFound = await this.user_service.filterOneUser({ email: userEmail });
+
+      if (!userFound) {
+        return res.status(401).json({
+          token: null,
+          message: "Usuario no encontrado.",
+        });
+      }
+
+      // Creamos un JWT payload
+      const session = { id: userFound._id } as IJwtPayload;
+
+      // Firmar el token JWT
+      const token = jwt.sign(session, _SECRET, {
+        expiresIn: 86400, // 24 horas
+      });
+
+      // Enviar respuesta con el token
+      return res.json({ token: token, _id: userFound._id, first_name: userFound.first_name });
+
+    } catch (error) {
+      console.error('Error durante el inicio de sesión con Google:', error);
+      return res.status(500).json({
+        message: 'Error interno del servidor',
+      });
+    }
+  }
+  else{
+    console.error('Missing fields');
+      return res.status(403).json({
+        message: 'Missing fields',
+      });
+  }
+  }
 }
