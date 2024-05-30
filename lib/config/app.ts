@@ -19,6 +19,7 @@ class App {
    public httpServer: HttpServer;
    public io: SocketIOServer;
    public mongoUrl: string = 'mongodb://localhost/' + environment.getDBName();
+   //public mongoUrl: string = 'mongodb://bankitos-mongodb:27017/' + environment.getDBName();
 
    private test_routes: TestRoutes = new TestRoutes();
    private common_routes: CommonRoutes = new CommonRoutes();
