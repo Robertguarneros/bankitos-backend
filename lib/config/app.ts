@@ -90,3 +90,4 @@ const appInstance = new App();
 appInstance.startServer();
 
 export default appInstance.app;
+export const io = appInstance.io; // Export the io instance
