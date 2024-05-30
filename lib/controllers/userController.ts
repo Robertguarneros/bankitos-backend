@@ -47,7 +47,7 @@ export class UserController {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
-
+    
     public async get_user(req: Request, res: Response) {
         try{
             if (req.params.id) {
