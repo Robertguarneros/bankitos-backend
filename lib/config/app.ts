@@ -80,8 +80,8 @@ class App {
    }
 
    public startServer(): void {
-      this.httpServer.listen(3001, () => {
-         console.log(`Server is running on port ${3001}`);
+      this.httpServer.listen(3002, () => {
+         console.log(`Server is running on port ${3002}`);
       });
    }
 }
