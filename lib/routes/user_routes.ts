@@ -26,6 +26,10 @@ export class UserRoutes {
             this.auth_controller.signinWithGoogle(req, res);
         });
 
+        app.post('/logout', (req: Request, res: Response) => {
+            this.auth_controller.logout(req, res);
+        });
+
 
         app.get('/users/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {

@@ -3,9 +3,12 @@ import * as jwt from 'jsonwebtoken';
 import User from '../modules/users/schema';
 import UserService from '../modules/users/service';
 import IJwtPayload from '../modules/JWTPayload';
+import RevokedTokenService from '../modules/revokedToken/service';
 
 export class AuthController {
   private user_service: UserService = new UserService();
+  private revoked_token_service: RevokedTokenService = new RevokedTokenService();
+
 
   public async signin(req: Request, res: Response): Promise<Response> {
     console.log('Log in');
@@ -76,7 +79,9 @@ export class AuthController {
   public async signinWithGoogle(req: Request, res: Response): Promise<Response> {
     console.log('Log in With Google');
     const _SECRET: string = 'api+jwt';
-    if(req.body.token && req.body.email){
+    console.log("Token: "+ req.body.token);
+    console.log("Mail: "+req.body.mail);
+    if(req.body.email && req.body.token){
     try {
       // Verificar el token recibido de Google
       const googleToken = req.body.token;
@@ -116,7 +121,7 @@ export class AuthController {
       });
 
       // Enviar respuesta con el token
-      return res.json({ token: token, _id: userFound._id, first_name: userFound.first_name });
+      return res.status(200).json({ token: token, _id: userFound._id, first_name: userFound.first_name });
 
     } catch (error) {
       console.error('Error durante el inicio de sesión con Google:', error);
@@ -132,4 +137,22 @@ export class AuthController {
       });
   }
   }
+
+  public async logout(req: Request, res: Response): Promise<Response> {
+    try {
+      const token = req.header('x-access-token'); // Cambiado a 'x-access-token'
+
+      if (!token) {
+        return res.status(400).json({ error: 'Token is missing' });
+      }
+
+      await this.revoked_token_service.revokeToken(token);
+
+      return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+      console.error('Error during logout:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
 }
