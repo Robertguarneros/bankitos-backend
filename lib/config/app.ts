@@ -64,6 +64,7 @@ class App {
       this.conversation_routes.route(this.app);
       this.housing_routes.route(this.app);
       this.chatbot_routes.route(this.app);
+      //leave common routes always at the end
       this.common_routes.route(this.app);
    }
 
