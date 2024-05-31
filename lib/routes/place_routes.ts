@@ -1,7 +1,6 @@
 import { Application, Request, Response, NextFunction } from 'express';
 import { PlaceController } from '../controllers/placeController';
 import  {authJWT}  from '../middlewares/authJWT';
-import { io } from '../config/app';
 
 export class PlaceRoutes {
 
@@ -17,9 +16,7 @@ export class PlaceRoutes {
                     console.log("Error cc: " + err)
                     return next(err); // Short-circuit if token verification fails
                 }
-                this.place_controller.create_place(req, res);
-                io.emit('notification', {message: 'A new place has been created '+ req.body.title});
-                
+                this.place_controller.create_place(req, res);                
             });
         });
 

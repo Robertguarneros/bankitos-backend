@@ -2,7 +2,6 @@ import { Application, Request, Response, NextFunction } from 'express';
 import { UserController } from '../controllers/userController';
 import  {authJWT}  from '../middlewares/authJWT';
 import { AuthController } from '../controllers/authController';
-
 export class UserRoutes {
 
     private user_controller: UserController = new UserController();
