@@ -3,6 +3,7 @@ import { IPlace } from '../modules/places/model';
 import PlaceService from '../modules/places/service';
 import UserService from '../modules/users/service';
 import * as mongoose from 'mongoose';
+import { io } from '../config/app';
 
 export class PlaceController {
 
@@ -61,6 +62,8 @@ export class PlaceController {
           console.log("place data realizado")
           await this.user_service.addPlaceToUser(req.body.author, place_data._id);
           console.log("añadido place a user")
+          await io.emit("new-place-created", place_params.title);
+
           return res.status(201).json(place_data);
         } else {
             console.log("missing fields")
@@ -92,7 +95,7 @@ export class PlaceController {
     try {
         // Extract pagination parameters from query string or use default values
         const page = req.query.page ? parseInt(req.query.page as string) : 1;
-        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 20;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 100;
 
         // Fetch users based on pagination parameters
         const place_data = await this.place_service.filterPlaces({}, page, pageSize);
@@ -107,7 +110,7 @@ export class PlaceController {
     try {
         // Extract pagination parameters from query string or use default values
         const page = req.query.page ? parseInt(req.query.page as string) : 1;
-        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 100;
         const place_filter = { author: req.params.id };
 
         // Fetch users based on pagination parameters

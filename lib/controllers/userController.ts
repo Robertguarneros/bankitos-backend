@@ -87,7 +87,7 @@ export class UserController {
         try {
             // Extract pagination parameters from query string or use default values
             const page = req.query.page ? parseInt(req.query.page as string) : 1;
-            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 10;
+            const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string) : 100;
     
             // Fetch users based on pagination parameters
             const user_data = await this.user_service.filterUsers({}, page, pageSize);
