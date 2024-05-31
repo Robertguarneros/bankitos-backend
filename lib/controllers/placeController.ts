@@ -56,12 +56,9 @@ export class PlaceController {
             creation_date: new Date(),
             modified_date: new Date(),
           };
-          console.log(place_params)
           const place_data = await this.place_service.createPlace(place_params);
           // Now, you may want to add the created post's ID to the user's array of posts
-          console.log("place data realizado")
           await this.user_service.addPlaceToUser(req.body.author, place_data._id);
-          console.log("añadido place a user")
           await io.emit("new-place-created", place_params.title);
 
           return res.status(201).json(place_data);
