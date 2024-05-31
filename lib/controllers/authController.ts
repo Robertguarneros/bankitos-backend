@@ -4,6 +4,7 @@ import User from '../modules/users/schema';
 import UserService from '../modules/users/service';
 import IJwtPayload from '../modules/JWTPayload';
 import RevokedTokenService from '../modules/revokedToken/service';
+import { io } from '../config/app';
 
 export class AuthController {
   private user_service: UserService = new UserService();
@@ -59,6 +60,7 @@ export class AuthController {
       });
 
       // Send response with token
+      await io.emit('user-logged-in');
       return res.json({ token: token, _id: userFound._id, first_name: userFound.first_name });
 
     } catch (error) {
