@@ -36,7 +36,7 @@ class App {
    constructor() {
       this.app = express();
       this.server = http.createServer(this.app);
-      this.io = new Server(this.server);
+      this.io = new Server(this.server,{cors: {origin: "*"}});
       this.io.on("connection", (socket: any) => {
          console.log("New client connected");
          socket.on("disconnect", () => console.log("Client disconnected"));
