@@ -11,7 +11,6 @@ export class AuthController {
 
 
   public async signin(req: Request, res: Response): Promise<Response> {
-    console.log('Log in');
     const _SECRET: string = 'api+jwt';
 
     try {
@@ -40,12 +39,8 @@ export class AuthController {
         modified_date: userFound.modified_date,
       });
 
-      console.log(req.body.password);
-      console.log(user_params.password);
-
       // Validate password
       const validPassword = await user_params.validatePassword(req.body.password);
-      console.log(validPassword);
 
       // Check if password is valid
       if (!validPassword) {
@@ -62,8 +57,6 @@ export class AuthController {
       const token = jwt.sign(session, _SECRET, {
         expiresIn: 86400, // 24 hours
       });
-
-      console.log(token);
 
       // Send response with token
       return res.json({ token: token, _id: userFound._id, first_name: userFound.first_name });
