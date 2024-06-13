@@ -92,6 +92,20 @@ export class UserRoutes {
                 }, 'User');
             });
         });
+        app.put('/users/changepassword/:id', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.AuthJWT.isOwner(req, res, (err?: any) => {
+                    if (err) {
+                        return next(err); // Short-circuit if isOwner check fails
+                    }
+                    this.user_controller.update_pass(req, res);
+                }, 'User');
+            });
+        });
+
 
         app.delete('/users/:id', (req: Request, res: Response, next: NextFunction) => {
             this.AuthJWT.verifyToken(req, res, (err?: any) => {

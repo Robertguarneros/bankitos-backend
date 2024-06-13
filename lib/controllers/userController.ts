@@ -145,7 +145,7 @@ export class UserController {
                     description: req.body.description || user_data.description,
                     dni: req.body.dni || user_data.dni,
                     personality: req.body.personality || user_data.personality,
-                    password: req.body.password || user_data.password,
+                    password: user_data.password,
                     birth_date: req.body.birth_date || user_data.birth_date,
                     role: req.body.role || user_data.role,
                     address: req.body.address || user_data.address,
@@ -157,13 +157,51 @@ export class UserController {
                     creation_date: user_data.creation_date,
                     modified_date: new Date(),
                 });
-                user_params.password = await user_params.encryptPassword(req.body.password);
+                
                 // Update user
                 await this.user_service.updateUser(user_params);
                 //get new user data
                 const new_user_data = await this.user_service.filterOneUser(user_filter);
                 // Send success response
                 return res.status(200).json(new_user_data);
+            } else {
+                // Send error response if ID parameter is missing
+                return res.status(400).json({ error: 'Missing ID parameter' });
+            }
+        } catch (error) {
+            // Catch and handle any errors
+            console.error("Error updating:", error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+    public async update_pass(req: Request, res: Response) {
+        try {
+            if (req.params.id) {
+                const user_filter = { _id: req.params.id };
+                // Fetch user
+                const user_data = await this.user_service.filterOneUser(user_filter);
+                if(user_data.user_deactivated===true){
+                    return res.status(400).json({ error: 'User not found' });
+                }
+                console.log(req.body.oldpassword);
+                console.log(req.body.newpassword);
+                const validPassword = await user_data.validatePassword(req.body.oldpassword);
+
+                // Check if password is valid
+                if (!validPassword) {
+                  return res.status(401).json({
+                    token: null,
+                    message: "El usuario o la contraseña son incorrectos.",
+                  });
+                }
+                else{
+                    user_data.password = await user_data.encryptPassword(req.body.newpassword);
+                    await this.user_service.updateUser(user_data);
+                    
+                    // Send success response
+                    return res.status(200).json();
+                }
+                
             } else {
                 // Send error response if ID parameter is missing
                 return res.status(400).json({ error: 'Missing ID parameter' });
