@@ -16,6 +16,7 @@ export class ReviewRoutes {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
                 }
+                console.log('Dentro de route' + req.body.place_id);
                 this.review_controller.create_review(req, res);
             });
         });

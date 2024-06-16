@@ -17,12 +17,10 @@ const schema = new Schema({
     user_rating: {type:Number,required:false},
     photo: {type:String,required:false},
     description: {type:String,required:false},
-    dni: {type:String,required:false},
     personality: {type:String,required:false},
     password: {type:String,required:true},
     birth_date: {type:Date,required:true},
     role: {type:String,required:true,default:'user'},
-    address: {type:String,required:false},
     housing_offered: [{ type: Schema.Types.ObjectId, ref: 'housings' }], // Array of ObjectIds referencing the housing model
     emergency_contact: {
         type:{

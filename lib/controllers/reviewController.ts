@@ -15,8 +15,7 @@ export class ReviewController {
     public async create_review(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
-            if (req.body.title && req.body.content && req.body.stars    ){
-               
+            if (req.body.title && req.body.content && req.body.stars){
                 console.log('dentro crear'+req.userId);
                 const review_params:IReview = {
                     title: req.body.title,
