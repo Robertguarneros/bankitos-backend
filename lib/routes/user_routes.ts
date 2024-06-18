@@ -2,11 +2,14 @@ import { Application, Request, Response, NextFunction } from 'express';
 import { UserController } from '../controllers/userController';
 import  {authJWT}  from '../middlewares/authJWT';
 import { AuthController } from '../controllers/authController';
+import { ReactAuthController } from '../controllers/reactAuthController';
+
 export class UserRoutes {
 
     private user_controller: UserController = new UserController();
     private AuthJWT: authJWT = new authJWT();
     private auth_controller: AuthController = new AuthController();
+    private react_auth_controller: ReactAuthController = new ReactAuthController();
 
     public route(app: Application) {
         
@@ -23,6 +26,10 @@ export class UserRoutes {
         app.post('/loginWithGoogle', (req: Request, res: Response) => {
             
             this.auth_controller.signinWithGoogle(req, res);
+        });
+
+        app.post('/googleloginreact', (req: Request, res: Response) => {
+            this.react_auth_controller.googleLogin(req, res);
         });
 
         app.post('/logout', (req: Request, res: Response) => {
