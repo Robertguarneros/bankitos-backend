@@ -13,6 +13,7 @@ import { ReviewRoutes } from "../routes/review_routes";
 import { ConversationRoutes } from "../routes/conversation_routes";
 import { HousingRoutes } from "../routes/housing_routes";
 import { ChatbotRoutes } from "../routes/chatbot";
+import { PhotoUploadRoutes } from "../routes/photo_upload_routes";
 
 
 class App {
@@ -32,6 +33,7 @@ class App {
    private conversation_routes: ConversationRoutes = new ConversationRoutes();
    private housing_routes: HousingRoutes = new HousingRoutes();
    private chatbot_routes: ChatbotRoutes = new ChatbotRoutes();
+   private photo_upload_routes: PhotoUploadRoutes = new PhotoUploadRoutes();
 
    constructor() {
       this.app = express();
@@ -51,6 +53,7 @@ class App {
       this.conversation_routes.route(this.app);
       this.housing_routes.route(this.app);
       this.chatbot_routes.route(this.app);
+      this.photo_upload_routes.route(this.app);
       //Siempre dejarlo abajo del todo si no da error!!!
       this.common_routes.route(this.app);
    }
