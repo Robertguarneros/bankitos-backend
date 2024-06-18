@@ -16,7 +16,6 @@ export class ReviewRoutes {
                 if (err) {
                     return next(err); // Short-circuit if token verification fails
                 }
-                console.log('Dentro de route' + req.body.place_id);
                 this.review_controller.create_review(req, res);
             });
         });
@@ -50,6 +49,14 @@ export class ReviewRoutes {
                     return next(err); // Short-circuit if token verification fails
                 }
                 this.review_controller.get_reviews_by_author(req, res);
+            });
+        });
+        app.get('/reviews', (req: Request, res: Response, next: NextFunction) => {
+            this.AuthJWT.verifyToken(req, res, (err?: any) => {
+                if (err) {
+                    return next(err); // Short-circuit if token verification fails
+                }
+                this.review_controller.get_reviews(req, res);
             });
         });
 

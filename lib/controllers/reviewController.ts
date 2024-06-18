@@ -15,8 +15,9 @@ export class ReviewController {
     public async create_review(req: Request, res: Response) {
         try{
             // this check whether all the filds were send through the request or not
-            if (req.body.title && req.body.content && req.body.stars){
-                console.log('dentro crear'+req.userId);
+            if (req.body.title && req.body.content && req.body.stars    ){
+               
+                
                 const review_params:IReview = {
                     title: req.body.title,
                     content: req.body.content,
@@ -77,6 +78,19 @@ export class ReviewController {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
+    public async get_reviews(req: Request, res: Response) {
+        try {
+            
+    
+            // Fetch users based on pagination parameters
+            const place_data = await this.review_service.filterReviews({});
+            
+            // Send success response
+            return res.status(200).json(place_data);
+        } catch (error) {
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+      }
 
     public async get_reviews_by_author(req: Request, res: Response) {
         try{
