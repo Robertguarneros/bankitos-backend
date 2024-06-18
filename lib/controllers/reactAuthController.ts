@@ -7,6 +7,8 @@ import RevokedTokenService from '../modules/revokedToken/service';
 import { io } from '../config/app';
 import { OAuth2Client } from 'google-auth-library';
 var verifier = require('google-id-token-verifier');
+import * as crypto from 'crypto';
+
 
 export class ReactAuthController {
   private user_service: UserService = new UserService();
@@ -29,12 +31,39 @@ export class ReactAuthController {
       // Check if user exists in your database
       const userFound = await this.user_service.filterOneUser({ email });
 
+      try{
       if (!userFound) {
-        return res.status(401).json({
-          token: null,
-          message: 'User not registered',
+        // Generate a random password
+        const randomPassword = crypto.randomBytes(10).toString('hex');
+
+        // Generate a random 10-digit phone number
+        const randomNumber = () => Math.floor(Math.random() * 9) + 1;
+        const randomPhoneNumber = `${randomNumber()}${Math.floor(Math.random() * 1000000000)}`;
+
+        // Create user with random password and phone number
+        const newUser = new User({
+            first_name: 'Google User',
+            last_name: 'Google User',
+            email: payload['email'],
+            phone_number: randomPhoneNumber,
+            gender: 'not specified',
+            password: randomPassword,
+            birth_date: new Date(),
+            role: req.body.role || 'user',
+            user_deactivated: false,
+            creation_date: new Date(),
+            modified_date: new Date(),
         });
+        newUser.password = await newUser.encryptPassword(randomPassword);
+        const user_data = await this.user_service.register(newUser);
       }
+    }
+    catch(error){   
+        console.error('Error during Google login:', error);
+        return res.status(500).json({message: 'Internal Server Error',
+        });
+    }
+
 
       // Create JWT payload
       const session = { id: userFound._id } as IJwtPayload;
