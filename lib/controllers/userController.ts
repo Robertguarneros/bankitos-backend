@@ -145,10 +145,6 @@ export class UserController {
           password: user_data.password,
           birth_date: req.body.birth_date || user_data.birth_date,
           role: req.body.role || user_data.role,
-          emergency_contact: {
-            full_name: emergency_contact.full_name || user_data.emergency_contact?.full_name,
-            telephone: emergency_contact.telephone || user_data.emergency_contact?.telephone,
-          },
           user_deactivated: user_data.user_deactivated,
           creation_date: user_data.creation_date,
           modified_date: new Date(),

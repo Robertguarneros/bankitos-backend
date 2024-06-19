@@ -19,10 +19,6 @@ export interface IUser {
   birth_date: Date;
   role: string;
   housing_offered?: mongoose.Types.ObjectId[];
-  emergency_contact?: {
-    full_name: string;
-    telephone: string;
-  };
   user_deactivated: boolean;
   creation_date: Date;
   modified_date: Date;
